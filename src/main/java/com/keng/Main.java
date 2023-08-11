@@ -21,50 +21,46 @@ public class Main {
     public static int xPoint = 0;
     public static int yPoint = 0;
     public static void main(String[] args) {
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+        MainProgram mainProgram = new MainProgram();
 
-        VideoCapture videoCapture = new VideoCapture(0); // Use 0 for the default camera, or change it to the appropriate camera index
-        if (!videoCapture.isOpened()) {
-            System.out.println("Error: Camera not found or cannot be opened.");
-            return;
-        }
-
-        JFrame frame = new JFrame("Camera Feed");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(640, 480);
-
-        JLabel label = new JLabel();
-        frame.add(label);
-        label.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                int x = e.getX();
-                int y = e.getY();
-                xPoint = x;
-                yPoint = y;
-                //System.out.println("Mouse clicked at: (" + x + ", " + y + ")");
-            }
-        });
-        frame.setVisible(true);
-
-        while (true) {
-            Mat frameMat = new Mat();
-            if (videoCapture.read(frameMat)) {
-                detectColor(frameMat);
-                BufferedImage bufImage = matToBufferedImage(frameMat);
-                label.setIcon(new ImageIcon(bufImage));
-                frame.pack();
-
-
-                //HighGui.imshow("Video Frame", frameMat);
-
-//                int key = HighGui.waitKey(30);
-//                if (key == 27) // Press 'Esc' to exit the loop and close the window
-//                    break;
-            } else {
-                break;
-            }
-        }
+//
+//        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+//
+//        VideoCapture videoCapture = new VideoCapture(0); // Use 0 for the default camera, or change it to the appropriate camera index
+//        if (!videoCapture.isOpened()) {
+//            System.out.println("Error: Camera not found or cannot be opened.");
+//            return;
+//        }
+//
+//        JFrame frame = new JFrame("Camera Feed");
+//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        frame.setSize(640, 480);
+//
+//        JLabel label = new JLabel();
+//        frame.add(label);
+//        label.addMouseListener(new MouseAdapter() {
+//            @Override
+//            public void mouseClicked(MouseEvent e) {
+//                int x = e.getX();
+//                int y = e.getY();
+//                xPoint = x;
+//                yPoint = y;
+//                //System.out.println("Mouse clicked at: (" + x + ", " + y + ")");
+//            }
+//        });
+//        frame.setVisible(true);
+//
+//        while (true) {
+//            Mat frameMat = new Mat();
+//            if (videoCapture.read(frameMat)) {
+//                detectColor(frameMat);
+//                BufferedImage bufImage = matToBufferedImage(frameMat);
+//                label.setIcon(new ImageIcon(bufImage));
+//                frame.pack();
+//            } else {
+//                break;
+//            }
+//        }
     }
 
     private static void detectColor(Mat frame) {
@@ -135,3 +131,5 @@ public class Main {
         }
     }
 }
+
+
