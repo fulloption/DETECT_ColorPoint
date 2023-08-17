@@ -19,10 +19,7 @@
             <artifactId>opencv</artifactId>
             <version>4.7.0-0</version>
         </dependency>
-
-
     </dependencies>
-
 </project>
 
 
