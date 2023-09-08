@@ -22,10 +22,22 @@ public class ShowDisplay extends JFrame {
     private JPanel panel1;
     private JButton button_setColor;
     private JLabel jLabal_MousePoint;
-    private JLabel jLabal_ColorSelect;
+    private JLabel jLabal_ColorShow1;
     private JLabel jLabelDisplay;
 
     private JButton jButtonReset;
+    private JLabel JlabelLogo2;
+    private JLabel jLabelLogo1;
+    private JLabel jLabelSetup;
+    private JLabel jLabelResult;
+    private JButton jButtonSetColor1;
+    private JButton jButtonSetColor2;
+    private JLabel jLabelSetup1;
+    private JLabel jLabelSetup2;
+    private JLabel jLabal_ColorShow2;
+    private JLabel jLabelStatus;
+    //private JLabel jLabelShow01;
+    private JLabel a;
     private JTextArea jTextArea_stauts;
     private String path = "";
 
@@ -37,29 +49,19 @@ public class ShowDisplay extends JFrame {
     private double hsvColorDetect[] = new double[3];
     private double[] colorMouse ;
     private VideoCapture videoCapture;
-    private ImageIcon icon;
+    private ImageIcon iconImageNotFound;
     public void showDisplay(){
         URL location = Main.class.getProtectionDomain().getCodeSource().getLocation();
         path = (location.getPath().substring(0,location.getPath().lastIndexOf("/")));
         setTitle("Color detect");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         File file  = new File(path+ "/ImgNotFound.jpg") ;
-        icon = new ImageIcon(file.getPath());
+        iconImageNotFound = new ImageIcon(file.getPath());
+        setSize(1100, 800);
         setLocationRelativeTo(null);
-
         setContentPane(panel1);
-        jLabelDisplay.setIcon(resizeIcon(icon,800,600));
-        setSize(1000, 800);
 
-        jLabelDisplay.setOpaque(true);
-        jLabal_MousePoint.setOpaque(true);
-        jLabal_ColorSelect.setOpaque(true);
-        jLabelDisplay.setText("");
-        jLabal_MousePoint.setText("");
-        jLabal_ColorSelect.setText("");
-        jLabal_MousePoint.setBackground(Color.black);
-        jLabal_ColorSelect.setBackground(Color.black);
-
+        initSwing();
         addListerner();
         Main.showDisplay.setVisible(true);
         toCameraDisplay();
@@ -73,7 +75,8 @@ public class ShowDisplay extends JFrame {
         //videoCapture.release();
         if (!videoCapture.isOpened()) {
             System.out.println("Error: Camera not found or cannot be opened.");
-            jLabelDisplay.setIcon(icon);
+            jLabelDisplay.setIcon(iconImageNotFound);
+            videoCapture.release();
             return;
         }else{
             Mat frameMat = new Mat();
@@ -87,8 +90,46 @@ public class ShowDisplay extends JFrame {
                 }
             }
         }
+        videoCapture.release();
 
+    }
+    private void initSwing(){
+        File file  = new File(path+ "/eac.jpg") ;
+        ImageIcon eac = new ImageIcon(file.getPath());
+        JlabelLogo2.setIcon(resizeIcon(eac,200,100));
+        file  = new File(path+ "/yokohama.jpg") ;
+        ImageIcon yoko = new ImageIcon(file.getPath());
 
+        //jLabelShow01.setText("");
+//        jLabelSetup.setPreferredSize(new Dimension(jLabelResult.getPreferredSize().width, 50)); // Set the height to 50 pixels
+//        jLabelResult.setPreferredSize(new Dimension(jLabelResult.getPreferredSize().width, 50)); // Set the height to 50 pixels
+        jLabelLogo1.setText("");
+        JlabelLogo2.setText("");
+        jLabelLogo1.setIcon(resizeIcon(yoko,200,100));
+        jLabelDisplay.setIcon(resizeIcon(iconImageNotFound,800,600));
+        jLabelDisplay.setOpaque(true);
+        jLabal_MousePoint.setOpaque(true);
+        jLabal_ColorShow1.setOpaque(true);
+        jLabal_ColorShow2.setOpaque(true);
+        jLabelSetup1.setOpaque(true);
+        jLabelSetup2.setOpaque(true);
+        jLabelStatus.setOpaque(true);
+        jLabelSetup1.setText("");
+        jLabelSetup2.setText("");
+        Color color = new Color(Integer.parseInt( Main.R_Setup1)
+                , Integer.parseInt( Main.G_Setup1)
+                , Integer.parseInt( Main.B_Setup1));// R G B
+        jLabelSetup1.setBackground(color);
+        color = new Color(Integer.parseInt( Main.R_Setup2)
+                , Integer.parseInt( Main.G_Setup2)
+                , Integer.parseInt( Main.B_Setup2));// R G B
+        jLabelSetup2.setBackground(color);
+        jLabelDisplay.setText("");
+        jLabal_MousePoint.setText("Click Color");
+        jLabal_ColorShow1.setText("");
+        jLabal_ColorShow2.setText("");
+        jLabal_MousePoint.setBackground(new Color(242, 242, 242));
+//        jLabal_ColorShow1.setBackground(Color.black);
     }
     private void addListerner(){
         jLabelDisplay.addMouseListener(new MouseAdapter() {
@@ -102,31 +143,62 @@ public class ShowDisplay extends JFrame {
             }
         });
         // Add an ActionListener to the JComboBox
-
-
-        //-----------
-        button_setColor.addMouseListener(new MouseAdapter() {
+        jButtonSetColor1.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                button_setColor_click(e);
+                Color color = new Color((int) colorMouse[2], (int) colorMouse[1], (int) colorMouse[0]);// R G B
+                jLabelSetup1.setBackground(color);
+                ColorProperties colorProperties = new ColorProperties();
+                String B = (String) String.valueOf(colorMouse[0]).split("\\.")[0];
+                String G = (String) String.valueOf(colorMouse[1]).split("\\.")[0];
+                String R = (String) String.valueOf(colorMouse[2]).split("\\.")[0];
+                String B_HSV = (String) String.valueOf(hsvColorMouse[0]).split("\\.")[0];
+                String G_HSV = (String) String.valueOf(hsvColorMouse[1]).split("\\.")[0];
+                String R_HSV = (String) String.valueOf(hsvColorMouse[2]).split("\\.")[0];
+                colorProperties.setColorMaster1(R,G,B,R_HSV,G_HSV,B_HSV);
+                Main.R_Setup1 = R;
+                Main.G_Setup1 = G;
+                Main.B_Setup1 = B;
+                Main.R_HSV_Setup1 = R_HSV;
+                Main.G_HSV_Setup1 = G_HSV;
+                Main.B_HSV_Setup1 = B_HSV;
+            }
+        });
+        jButtonSetColor2.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Color color = new Color((int) colorMouse[2], (int) colorMouse[1], (int) colorMouse[0]);// R G B
+                jLabelSetup2.setBackground(color);
+                ColorProperties colorProperties = new ColorProperties();
+                String B = (String) String.valueOf(colorMouse[0]).split("\\.")[0];
+                String G = (String) String.valueOf(colorMouse[1]).split("\\.")[0];
+                String R = (String) String.valueOf(colorMouse[2]).split("\\.")[0];
+                String B_HSV = (String) String.valueOf(hsvColorMouse[0]).split("\\.")[0];
+                String G_HSV = (String) String.valueOf(hsvColorMouse[1]).split("\\.")[0];
+                String R_HSV = (String) String.valueOf(hsvColorMouse[2]).split("\\.")[0];
+                colorProperties.setColorMaster2(R,G,B,R_HSV,G_HSV,B_HSV);
+                Main.R_Setup2 = R;
+                Main.G_Setup2 = G;
+                Main.B_Setup2 = B;
+                Main.R_HSV_Setup2 = R_HSV;
+                Main.G_HSV_Setup2 = G_HSV;
+                Main.B_HSV_Setup2 = B_HSV;
             }
         });
         //-----------
-        jButtonReset.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                jButtonReset_setColor_click(e);
-            }
-        });
+
+        //-----------
+
         Main.showDisplay.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 videoCapture.release();
+
             }
         });
     }
     private void jButtonReset_setColor_click(MouseEvent e){
-        jLabal_ColorSelect.setBackground(Color.white);
+        jLabal_ColorShow1.setBackground(Color.white);
 //        Color colorHsv = new Color((int) hsvColorMouse[2], (int) hsvColorMouse[1], (int) hsvColorMouse[0]);// R G B
         hsvColorDetect[0] = 255;
         hsvColorDetect[1] = 255;
@@ -134,7 +206,7 @@ public class ShowDisplay extends JFrame {
     }
     private void button_setColor_click(MouseEvent e){
         Color color = new Color((int) colorMouse[2], (int) colorMouse[1], (int) colorMouse[0]);// R G B
-        jLabal_ColorSelect.setBackground(color);
+        jLabal_ColorShow1.setBackground(color);
 //        Color colorHsv = new Color((int) hsvColorMouse[2], (int) hsvColorMouse[1], (int) hsvColorMouse[0]);// R G B
         hsvColorDetect[0] = hsvColorMouse[0];
         hsvColorDetect[1] = hsvColorMouse[1];
@@ -177,13 +249,50 @@ public class ShowDisplay extends JFrame {
 //        Scalar upperBound = new Scalar(100, 60, 35); // Upper bound for green in HSV
         // กำหนดช่วงของสีที่ต้องการค้นหา rgba(65,157,136,255)R G B
         // Define the range for green color in HSV
-        Scalar lowerColor = new Scalar(hsvColorDetect[0] - 5, hsvColorDetect[1] - 20, hsvColorDetect[2] - 20);
-        Scalar upperColor = new Scalar(hsvColorDetect[0] + 5, hsvColorDetect[1] + 20, hsvColorDetect[2] + 20);
+        Scalar lowerColor1 = new Scalar(Integer.parseInt(Main.B_HSV_Setup1) - 5, Integer.parseInt(Main.G_HSV_Setup1) - 20, Integer.parseInt(Main.R_HSV_Setup1) - 20);//B, G, R
+        Scalar upperColor1 = new Scalar(Integer.parseInt(Main.B_HSV_Setup1) + 5, Integer.parseInt(Main.G_HSV_Setup1) + 20, Integer.parseInt(Main.R_HSV_Setup1) + 20);//B, G, R
+
+        Scalar lowerColor2 = new Scalar(Integer.parseInt(Main.B_HSV_Setup2) - 5, Integer.parseInt(Main.G_HSV_Setup2) - 20, Integer.parseInt(Main.R_HSV_Setup2) - 20);//B, G, R
+        Scalar upperColor2 = new Scalar(Integer.parseInt(Main.B_HSV_Setup2) + 5, Integer.parseInt(Main.G_HSV_Setup2) + 20, Integer.parseInt(Main.R_HSV_Setup2) + 20);//B, G, R
 //        System.out.println(hsvColorDetect[0]+"-"+hsvColorDetect[1]+"-"+hsvColorDetect[2]);
-        Mat mask = new Mat();
-        Core.inRange(hsvImage, lowerColor, upperColor, mask);
+        Mat mask1 = new Mat();
+        Mat mask2 = new Mat();
+        Core.inRange(hsvImage, lowerColor1, upperColor1, mask1);
+        Core.inRange(hsvImage, lowerColor2, upperColor2, mask2);
+        int count = Core.countNonZero(mask1);
+        int count2 = Core.countNonZero(mask2);
+        int chk2Value = 0;
+        if(count > 100){
+            Color color = new Color(Integer.parseInt( Main.R_Setup1)
+                    , Integer.parseInt( Main.G_Setup1)
+                    , Integer.parseInt( Main.B_Setup1));// R G B
+            jLabal_ColorShow1.setBackground(color);
+            chk2Value++;
+        }else{
+            jLabal_ColorShow1.setBackground(new Color(242, 242, 242));
+        }
+        if(count2 > 100){
+            Color color = new Color(Integer.parseInt( Main.R_Setup2)
+                    , Integer.parseInt( Main.G_Setup2)
+                    , Integer.parseInt( Main.B_Setup2));// R G B
+            jLabal_ColorShow2.setBackground(color);
+            chk2Value++;
+        }else{
+            jLabal_ColorShow2.setBackground(new Color(242, 242, 242));
+        }
+        if(chk2Value == 2){
+            jLabelStatus.setText("OK");
+            jLabelStatus.setBackground(Color.green);
+        }else{
+            jLabelStatus.setText("NG");
+            jLabelStatus.setBackground(Color.RED);
+        }
+        System.out.println(count+" - "+count2);
         // Apply the mask to the original frame
-        frame.setTo(new Scalar(0, 5, 255), mask); // Highlight detected green regions in the frame (green color)
+        //frame.setTo(mask);
+//        frame.setTo(new Scalar(0, 5, 255), mask1).setTo(new Scalar(255, 5, 0), mask2);
+//        frame.setTo(new Scalar(0, 5, 255), mask1); // Highlight detected green regions in the frame (green color)
+//        frame.setTo(new Scalar(255, 5, 0), mask2); // Highlight detected green regions in the frame (green color)
     }
     private static BufferedImage matToBufferedImage(Mat mat) {
         MatOfByte matOfByte = new MatOfByte();
@@ -221,5 +330,9 @@ public class ShowDisplay extends JFrame {
             System.out.println("Error: Unsupported number of channels.");
             return new Scalar(0, 0, 0);
         }
+    }
+
+    private void createUIComponents() {
+        // TODO: place custom component creation code here
     }
 }

@@ -3,9 +3,6 @@ package com.keng;
 import org.yaml.snakeyaml.Yaml;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
@@ -29,6 +26,18 @@ public class Main {
     public static int cameraIndex = 1;
     public static CameraList cameraList;
     public static ShowDisplay showDisplay;
+    public static String R_Setup1 = "";
+    public static String G_Setup1 = "";
+    public static String B_Setup1 = "";
+    public static String R_Setup2 = "";
+    public static String G_Setup2 = "";
+    public static String B_Setup2 = "";
+    public static String R_HSV_Setup1 = "";
+    public static String G_HSV_Setup1 = "";
+    public static String B_HSV_Setup1 = "";
+    public static String R_HSV_Setup2 = "";
+    public static String G_HSV_Setup2 = "";
+    public static String B_HSV_Setup2 = "";
     public static void main(String[] args) {
         String configFile = "/config.yaml";
         URL location = Main.class.getProtectionDomain().getCodeSource().getLocation();
@@ -63,8 +72,8 @@ public class Main {
 
 //        cameraList = new CameraList();
 //        cameraList.showDisplay();
-
-
+        ColorProperties colorProperties = new ColorProperties();
+        colorProperties.readColor();
         showDisplay = new ShowDisplay();
         showDisplay.showDisplay();
 
