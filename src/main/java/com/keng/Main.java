@@ -1,11 +1,6 @@
 package com.keng;
-import org.opencv.core.Core;
-import org.opencv.core.Mat;
-import org.opencv.core.MatOfByte;
-import org.opencv.core.Scalar;
-import org.opencv.imgcodecs.Imgcodecs;
-import org.opencv.imgproc.Imgproc;
-import org.opencv.videoio.VideoCapture;
+
+import org.yaml.snakeyaml.Yaml;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -13,8 +8,18 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.util.Map;
 
+import org.opencv.core.Core;
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfByte;
+import org.opencv.core.Scalar;
+import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
 // Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
 // then press Enter. You can now see whitespace characters in your code.
 public class Main {
@@ -25,10 +30,35 @@ public class Main {
     public static CameraList cameraList;
     public static ShowDisplay showDisplay;
     public static void main(String[] args) {
+        String configFile = "/config.yaml";
         URL location = Main.class.getProtectionDomain().getCodeSource().getLocation();
         path = (location.getPath().substring(0,location.getPath().lastIndexOf("/")));
-        System.load(path+"/opencv_java480.dll");
-        System.load(path+"/opencv_videoio_ffmpeg480_64.dll");
+        System.load(path+"/opencv_java452.dll");
+        System.load(path+"/opencv_videoio_ffmpeg452_64.dll");
+        try {
+            // Open an input stream to read the YAML file
+            InputStream input = new FileInputStream(path+configFile);
+
+            // Create a YAML parser using SnakeYAML library
+            Yaml yaml = new Yaml();
+
+            // Parse the YAML file into a Java object
+//            Object data = yaml.load(input);
+            Map<String, Object> data = yaml.load(input);
+            int a = (int) data.get("camera");
+            Main.cameraIndex = a;
+            //Integer camIndex = Integer.parseInt();
+            //cameraIndex = ;
+            //System.out.println(obj.get("camera"));
+            // You can now work with the data from the config.yaml file as needed
+            // For example, you can access specific properties:
+            // String someProperty = ((Map<String, String>) data).get("someProperty");
+
+            // Close the input stream when you're done
+            input.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
 //        cameraList = new CameraList();

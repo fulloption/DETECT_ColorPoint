@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="DETECT_ColorPoint:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/DETECT_ColorPoint_jar</output-path>
+    <root id="archive" name="DETECT_ColorPoint.jar">
+      <element id="module-output" name="DETECT_ColorPoint" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openpnp/opencv/4.7.0-0/opencv-4.7.0-0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/yaml/snakeyaml/1.28/snakeyaml-1.28.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

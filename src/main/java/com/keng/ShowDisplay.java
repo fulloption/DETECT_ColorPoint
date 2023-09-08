@@ -1,16 +1,4 @@
 package com.keng;
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.net.URL;
-
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
@@ -18,6 +6,17 @@ import org.opencv.core.Scalar;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.videoio.VideoCapture;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.net.URL;
+
+
 
 public class ShowDisplay extends JFrame {
     private JPanel panel1;
@@ -64,12 +63,14 @@ public class ShowDisplay extends JFrame {
         addListerner();
         Main.showDisplay.setVisible(true);
         toCameraDisplay();
+        //
     }
     private void toCameraDisplay(){
         hsvColorDetect[0]=255;
         hsvColorDetect[1]=255;
         hsvColorDetect[2]=255;
-        videoCapture = new VideoCapture(0);
+        videoCapture = new VideoCapture(Main.cameraIndex);
+        //videoCapture.release();
         if (!videoCapture.isOpened()) {
             System.out.println("Error: Camera not found or cannot be opened.");
             jLabelDisplay.setIcon(icon);
@@ -117,7 +118,12 @@ public class ShowDisplay extends JFrame {
                 jButtonReset_setColor_click(e);
             }
         });
-
+        Main.showDisplay.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                videoCapture.release();
+            }
+        });
     }
     private void jButtonReset_setColor_click(MouseEvent e){
         jLabal_ColorSelect.setBackground(Color.white);
@@ -173,7 +179,7 @@ public class ShowDisplay extends JFrame {
         // Define the range for green color in HSV
         Scalar lowerColor = new Scalar(hsvColorDetect[0] - 5, hsvColorDetect[1] - 20, hsvColorDetect[2] - 20);
         Scalar upperColor = new Scalar(hsvColorDetect[0] + 5, hsvColorDetect[1] + 20, hsvColorDetect[2] + 20);
-        System.out.println(hsvColorDetect[0]+"-"+hsvColorDetect[1]+"-"+hsvColorDetect[2]);
+//        System.out.println(hsvColorDetect[0]+"-"+hsvColorDetect[1]+"-"+hsvColorDetect[2]);
         Mat mask = new Mat();
         Core.inRange(hsvImage, lowerColor, upperColor, mask);
         // Apply the mask to the original frame
