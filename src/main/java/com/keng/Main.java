@@ -3,7 +3,6 @@ import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
 import org.opencv.core.Scalar;
-import org.opencv.highgui.HighGui;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.videoio.VideoCapture;
@@ -14,53 +13,60 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.net.URL;
 
 // Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
 // then press Enter. You can now see whitespace characters in your code.
 public class Main {
+    private static String path = "";
     public static int xPoint = 0;
     public static int yPoint = 0;
+    public static int cameraIndex = 9;
     public static void main(String[] args) {
-//        MainProgram mainProgram = new MainProgram();
-
+        URL location = Main.class.getProtectionDomain().getCodeSource().getLocation();
+        path = (location.getPath().substring(0,location.getPath().lastIndexOf("/")));
+        System.load(path+"/opencv_java480.dll");
+        System.load(path+"/opencv_videoio_ffmpeg480_64.dll");
+        CameraList cameraList = new CameraList();
+        cameraList.showDisplay();
+//        ShowDisplay showDisplay = new ShowDisplay();
+//        showDisplay.showDisplay();
 //
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+//        VideoCapture videoCapture = new VideoCapture(0); // Use 0 for the default camera, or change it to the appropriate camera index
+//        if (!videoCapture.isOpened()) {
+//            System.out.println("Error: Camera not found or cannot be opened.");
+//            return;
+//        }
 
-        VideoCapture videoCapture = new VideoCapture(0); // Use 0 for the default camera, or change it to the appropriate camera index
-        if (!videoCapture.isOpened()) {
-            System.out.println("Error: Camera not found or cannot be opened.");
-            return;
-        }
-
-        JFrame frame = new JFrame("Camera Feed");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(640, 480);
-
-        JLabel label = new JLabel();
-        frame.add(label);
-        label.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                int x = e.getX();
-                int y = e.getY();
-                xPoint = x;
-                yPoint = y;
-                //System.out.println("Mouse clicked at: (" + x + ", " + y + ")");
-            }
-        });
-        frame.setVisible(true);
-
-        while (true) {
-            Mat frameMat = new Mat();
-            if (videoCapture.read(frameMat)) {
-                detectColor(frameMat);
-                BufferedImage bufImage = matToBufferedImage(frameMat);
-                label.setIcon(new ImageIcon(bufImage));
-                frame.pack();
-            } else {
-                break;
-            }
-        }
+//        JFrame frame = new JFrame("Camera Feed");
+//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        frame.setSize(640, 480);
+//
+//        JLabel label = new JLabel();
+//        frame.add(label);
+//        label.addMouseListener(new MouseAdapter() {
+//            @Override
+//            public void mouseClicked(MouseEvent e) {
+//                int x = e.getX();
+//                int y = e.getY();
+//                xPoint = x;
+//                yPoint = y;
+//                //System.out.println("Mouse clicked at: (" + x + ", " + y + ")");
+//            }
+//        });
+//        frame.setVisible(true);
+//
+//        while (true) {
+//            Mat frameMat = new Mat();
+//            if (videoCapture.read(frameMat)) {
+//                detectColor(frameMat);
+//                BufferedImage bufImage = matToBufferedImage(frameMat);
+//                label.setIcon(new ImageIcon(bufImage));
+//                frame.pack();
+//            } else {
+//                break;
+//            }
+//        }
     }
 
     private static void detectColor(Mat frame) {
