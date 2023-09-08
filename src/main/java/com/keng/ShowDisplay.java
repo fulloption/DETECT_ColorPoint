@@ -40,12 +40,15 @@ public class ShowDisplay extends JFrame {
     private VideoCapture videoCapture;
     private ImageIcon icon;
     public void showDisplay(){
+        URL location = Main.class.getProtectionDomain().getCodeSource().getLocation();
+        path = (location.getPath().substring(0,location.getPath().lastIndexOf("/")));
         setTitle("Color detect");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         File file  = new File(path+ "/ImgNotFound.jpg") ;
         icon = new ImageIcon(file.getPath());
         setLocationRelativeTo(null);
 
+        jLabelDisplay.setIcon(resizeIcon(icon,800,600));
         setSize(1000, 800);
 
         jLabelDisplay.setOpaque(true);
@@ -56,34 +59,26 @@ public class ShowDisplay extends JFrame {
         jLabal_ColorSelect.setText("");
         jLabal_MousePoint.setBackground(Color.black);
         jLabal_ColorSelect.setBackground(Color.black);
-        jLabelDisplay.setIcon(resizeIcon(icon,800,600));
 
         addListerner();
         setContentPane(panel1);
         this.setVisible(true);
-        this.pack();
         toCameraDisplay();
     }
     private void toCameraDisplay(){
         hsvColorDetect[0]=255;
         hsvColorDetect[1]=255;
         hsvColorDetect[2]=255;
-        if (videoCapture != null) {
-            videoCapture.release(); // Release the current VideoCapture
-        }
-        videoCapture = new VideoCapture(Main.cameraIndex);
+        videoCapture = new VideoCapture(0);
         if (!videoCapture.isOpened()) {
             System.out.println("Error: Camera not found or cannot be opened.");
-            File file  = new File(path+ "/ImgNotFound.jpg") ;
-            icon = new ImageIcon(file.getPath());
             jLabelDisplay.setIcon(icon);
             return;
         }else{
             Mat frameMat = new Mat();
-            this.pack();
             while (true) {
                 if (videoCapture.read(frameMat)) {
-                    //detectColor(frameMat);
+                    detectColor(frameMat);
                     BufferedImage bufImage = matToBufferedImage(frameMat);
                     jLabelDisplay.setIcon(new ImageIcon(bufImage));
                 } else {

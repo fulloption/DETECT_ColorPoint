@@ -21,23 +21,29 @@ public class Main {
     private static String path = "";
     public static int xPoint = 0;
     public static int yPoint = 0;
-    public static int cameraIndex = 9;
+    public static int cameraIndex = 1;
+    public static CameraList cameraList;
+    public static ShowDisplay showDisplay;
     public static void main(String[] args) {
         URL location = Main.class.getProtectionDomain().getCodeSource().getLocation();
         path = (location.getPath().substring(0,location.getPath().lastIndexOf("/")));
         System.load(path+"/opencv_java480.dll");
         System.load(path+"/opencv_videoio_ffmpeg480_64.dll");
-        CameraList cameraList = new CameraList();
-        cameraList.showDisplay();
-//        ShowDisplay showDisplay = new ShowDisplay();
-//        showDisplay.showDisplay();
-//
+
+
+//        cameraList = new CameraList();
+//        cameraList.showDisplay();
+
+
+        showDisplay = new ShowDisplay();
+        showDisplay.showDisplay();
+
 //        VideoCapture videoCapture = new VideoCapture(0); // Use 0 for the default camera, or change it to the appropriate camera index
 //        if (!videoCapture.isOpened()) {
 //            System.out.println("Error: Camera not found or cannot be opened.");
 //            return;
 //        }
-
+//
 //        JFrame frame = new JFrame("Camera Feed");
 //        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 //        frame.setSize(640, 480);

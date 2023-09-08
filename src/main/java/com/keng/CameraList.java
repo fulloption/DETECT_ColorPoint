@@ -5,6 +5,8 @@ import org.opencv.videoio.VideoCapture;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class CameraList extends JFrame {
     private JComboBox jComboCameraList;
@@ -30,6 +32,26 @@ public class CameraList extends JFrame {
                 jComboCameraList_event(e);
             }
         });
+
+        selectButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+//                System.out.println(Main.cameraIndex);
+//                VideoCapture videoCapture = new VideoCapture(Main.cameraIndex);
+//                if (!videoCapture.isOpened()) {
+//                    System.out.println("Error: Camera not found or cannot be opened.");
+//                }else{
+//                    Main.cameraList.setVisible(false);
+//                    ShowDisplay showDisplay = new ShowDisplay();
+//                    showDisplay.showDisplay();
+//
+//                    //this.setVisible(false);
+//                }
+                Main.cameraList.setVisible(false);
+                Main.showDisplay = new ShowDisplay();
+                Main.showDisplay.showDisplay();
+            }
+        });
     }
     private void jComboCameraList_event(ActionEvent e){// handle webcam to change display
         String selectedItem = (String) jComboCameraList.getSelectedItem();
@@ -38,7 +60,7 @@ public class CameraList extends JFrame {
 
     }
     private void cameraList(){
-        VideoCapture videoCapture1 = new VideoCapture(0);
+        /*VideoCapture videoCapture1 = new VideoCapture(0);
         VideoCapture videoCapture2 = new VideoCapture(1);
         VideoCapture videoCapture3 = new VideoCapture(2);
         VideoCapture videoCapture4 = new VideoCapture(3);
@@ -58,6 +80,6 @@ public class CameraList extends JFrame {
         }
         if(videoCapture5.isOpened()){
             jComboCameraList.addItem("5");
-        }
+        }*/
     }
 }
