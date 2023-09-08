@@ -1,6 +1,5 @@
 package com.keng;
 
-import org.opencv.videoio.VideoCapture;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -17,21 +16,20 @@ public class CameraList extends JFrame {
         setTitle("Select Camera");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        panel1.setSize(300,200);
+        setSize(300, 100);
         setContentPane(panel1);
 
 
         jComboCameraList.setOpaque(true);
         cameraList();
-        this.setVisible(true);
-        this.pack();
-        jComboCameraList.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Handle the selection change here
-                jComboCameraList_event(e);
-            }
-        });
+        Main.cameraList.setVisible(true);
+//        jComboCameraList.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                // Handle the selection change here
+//                jComboCameraList_event(e);
+//            }
+//        });
 
         selectButton.addMouseListener(new MouseAdapter() {
             @Override

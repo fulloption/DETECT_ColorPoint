@@ -48,6 +48,7 @@ public class ShowDisplay extends JFrame {
         icon = new ImageIcon(file.getPath());
         setLocationRelativeTo(null);
 
+        setContentPane(panel1);
         jLabelDisplay.setIcon(resizeIcon(icon,800,600));
         setSize(1000, 800);
 
@@ -61,8 +62,7 @@ public class ShowDisplay extends JFrame {
         jLabal_ColorSelect.setBackground(Color.black);
 
         addListerner();
-        setContentPane(panel1);
-        this.setVisible(true);
+        Main.showDisplay.setVisible(true);
         toCameraDisplay();
     }
     private void toCameraDisplay(){
