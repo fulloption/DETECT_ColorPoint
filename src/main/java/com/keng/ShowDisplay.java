@@ -1,11 +1,9 @@
 package com.keng;
-import org.opencv.core.Core;
-import org.opencv.core.Mat;
-import org.opencv.core.MatOfByte;
-import org.opencv.core.Scalar;
+import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.videoio.VideoCapture;
+import org.opencv.utils.Converters;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -15,7 +13,9 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.net.URL;
-
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 
 public class ShowDisplay extends JFrame {
@@ -57,6 +57,9 @@ public class ShowDisplay extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         File file  = new File(path+ "/ImgNotFound.jpg") ;
         iconImageNotFound = new ImageIcon(file.getPath());
+        Image icon = Toolkit.getDefaultToolkit().getImage(path+ "/yokohama.jpg");
+        Main.showDisplay.setIconImage(icon);
+
         setSize(1100, 800);
         setLocationRelativeTo(null);
         setContentPane(panel1);
@@ -128,7 +131,7 @@ public class ShowDisplay extends JFrame {
         jLabal_MousePoint.setText("Click Color");
         jLabal_ColorShow1.setText("");
         jLabal_ColorShow2.setText("");
-        jLabal_MousePoint.setBackground(new Color(242, 242, 242));
+        jLabal_MousePoint.setBackground(new Color(255, 255, 255));
 //        jLabal_ColorShow1.setBackground(Color.black);
     }
     private void addListerner(){
@@ -219,7 +222,35 @@ public class ShowDisplay extends JFrame {
         Image resizedImage = img.getScaledInstance(resizedWidth, resizedHeight,  java.awt.Image.SCALE_SMOOTH);
         return new ImageIcon(resizedImage);
     }
+
     private void detectColor(Mat frame) {
+        Mat hsvImage = new Mat();
+        Imgproc.cvtColor(frame, hsvImage, Imgproc.COLOR_BGR2HSV);
+
+        Scalar lowerColor1 = new Scalar(Integer.parseInt(Main.B_HSV_Setup1) - 5, Integer.parseInt(Main.G_HSV_Setup1) - 20, Integer.parseInt(Main.R_HSV_Setup1) - 20);//B, G, R
+        Scalar upperColor1 = new Scalar(Integer.parseInt(Main.B_HSV_Setup1) + 5, Integer.parseInt(Main.G_HSV_Setup1) + 20, Integer.parseInt(Main.R_HSV_Setup1) + 20);//B, G, R
+        // Threshold the image to isolate the desired color
+        // Threshold the image to isolate the desired color
+        Mat mask = new Mat();
+        Core.inRange(hsvImage, lowerColor1, upperColor1, mask);
+
+        // Find circles with a radius of 10 pixels
+        Mat circles = new Mat();
+        Imgproc.HoughCircles(mask, circles, Imgproc.HOUGH_GRADIENT, 1, 20, 100, 30, 2, 15);
+//        mask: รูปภาพที่คุณต้องการที่จะค้นหาวงกลมในนั้น
+//        circles: มาตรฐานของรายการที่เก็บข้อมูลวงกลมที่ค้นพบ
+//        method: วิธีการทำงานของการแปลงวงกลม (สามารถใช้ Imgproc.HOUGH_GRADIENT เป็นค่ามาตรฐาน)
+//        dp: ค่าสัดส่วนของออกรูปภาพ (1 คือขนาดเดิม, 2 จะลดครึ่งรูปภาพ)
+//        minDist: ระยะห่างขั้นต่ำระหว่างจุดศูนย์กลางของวงกลม
+//        param1: ค่าพารามิเตอร์แรกสำหรับการค้นหาวงกลม (ลองปรับให้เหมาะสม)
+//        param2: ค่าพารามิเตอร์ที่สองสำหรับการค้นหาวงกลม (ลองปรับให้เหมาะสม)
+//        minRadius: ความยาวขั้นต่ำของรัศมีวงกลม
+//        maxRadius: ความยาวสูงสุดของรัศมีวงกลม
+        // Count the number of circles (color points)
+        int numberOfColorPoints = (circles.cols() == 0) ? 0 : circles.cols();
+        System.out.println("Number of color points with a radius of 10 pixels: " + numberOfColorPoints);
+    }
+    private void detectColor2(Mat frame) {
         Mat hsvImage = new Mat();
         Imgproc.cvtColor(frame, hsvImage, Imgproc.COLOR_BGR2HSV);
         if(ChkXpoint != xPoint
@@ -262,24 +293,30 @@ public class ShowDisplay extends JFrame {
         int count = Core.countNonZero(mask1);
         int count2 = Core.countNonZero(mask2);
         int chk2Value = 0;
-        if(count > 100){
+
+
+
+
+        if(count > Main.imgPixel){//change to detect
             Color color = new Color(Integer.parseInt( Main.R_Setup1)
                     , Integer.parseInt( Main.G_Setup1)
                     , Integer.parseInt( Main.B_Setup1));// R G B
             jLabal_ColorShow1.setBackground(color);
             chk2Value++;
         }else{
-            jLabal_ColorShow1.setBackground(new Color(242, 242, 242));
+            jLabal_ColorShow1.setBackground(new Color(252, 252, 252));
         }
-        if(count2 > 100){
+
+        if(count2 > Main.imgPixel){//change to detect
             Color color = new Color(Integer.parseInt( Main.R_Setup2)
                     , Integer.parseInt( Main.G_Setup2)
                     , Integer.parseInt( Main.B_Setup2));// R G B
             jLabal_ColorShow2.setBackground(color);
             chk2Value++;
         }else{
-            jLabal_ColorShow2.setBackground(new Color(242, 242, 242));
+            jLabal_ColorShow2.setBackground(new Color(252, 252, 252));
         }
+
         if(chk2Value == 2){
             jLabelStatus.setText("OK");
             jLabelStatus.setBackground(Color.green);
@@ -287,7 +324,7 @@ public class ShowDisplay extends JFrame {
             jLabelStatus.setText("NG");
             jLabelStatus.setBackground(Color.RED);
         }
-        System.out.println(count+" - "+count2);
+        //System.out.println(count+" - "+count2);
         // Apply the mask to the original frame
         //frame.setTo(mask);
 //        frame.setTo(new Scalar(0, 5, 255), mask1).setTo(new Scalar(255, 5, 0), mask2);

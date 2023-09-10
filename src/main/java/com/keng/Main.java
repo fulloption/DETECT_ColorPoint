@@ -38,6 +38,7 @@ public class Main {
     public static String R_HSV_Setup2 = "";
     public static String G_HSV_Setup2 = "";
     public static String B_HSV_Setup2 = "";
+    public static int imgPixel = 5;
     public static void main(String[] args) {
         String configFile = "/config.yaml";
         URL location = Main.class.getProtectionDomain().getCodeSource().getLocation();
@@ -54,8 +55,10 @@ public class Main {
             // Parse the YAML file into a Java object
 //            Object data = yaml.load(input);
             Map<String, Object> data = yaml.load(input);
-            int a = (int) data.get("camera");
-            Main.cameraIndex = a;
+            int webcam = (int) data.get("camera");
+            int pixel = (int) data.get("pixel");
+            Main.cameraIndex = webcam;
+            Main.imgPixel = pixel;
             //Integer camIndex = Integer.parseInt();
             //cameraIndex = ;
             //System.out.println(obj.get("camera"));
