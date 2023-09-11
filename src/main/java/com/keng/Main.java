@@ -1,20 +1,22 @@
 package com.keng;
+
+import org.yaml.snakeyaml.Yaml;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Map;
+
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
 import org.opencv.core.Scalar;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
-import org.opencv.videoio.VideoCapture;
-
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.net.URL;
-
 // Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
 // then press Enter. You can now see whitespace characters in your code.
 public class Main {
@@ -24,18 +26,67 @@ public class Main {
     public static int cameraIndex = 1;
     public static CameraList cameraList;
     public static ShowDisplay showDisplay;
+    public static String R_Setup1 = "";
+    public static String G_Setup1 = "";
+    public static String B_Setup1 = "";
+    public static String R_Setup2 = "";
+    public static String G_Setup2 = "";
+    public static String B_Setup2 = "";
+    public static String R_HSV_Setup1 = "";
+    public static String G_HSV_Setup1 = "";
+    public static String B_HSV_Setup1 = "";
+    public static String R_HSV_Setup2 = "";
+    public static String G_HSV_Setup2 = "";
+    public static String B_HSV_Setup2 = "";
+    public static int imgPixel = 5;
     public static void main(String[] args) {
+        String configFile = "/config.yaml";
         URL location = Main.class.getProtectionDomain().getCodeSource().getLocation();
         path = (location.getPath().substring(0,location.getPath().lastIndexOf("/")));
-        System.load(path+"/opencv_java480.dll");
-        System.load(path+"/opencv_videoio_ffmpeg480_64.dll");
+        System.load(path+"/opencv_java452.dll");
+        System.load(path+"/opencv_videoio_ffmpeg452_64.dll");
+        try {
+            // Open an input stream to read the YAML file
+            InputStream input = new FileInputStream(path+configFile);
+
+            // Create a YAML parser using SnakeYAML library
+            Yaml yaml = new Yaml();
+
+            // Parse the YAML file into a Java object
+//            Object data = yaml.load(input);
+            Map<String, Object> data = yaml.load(input);
+            int webcam = (int) data.get("camera");
+            int pixel = (int) data.get("pixel");
+            Main.cameraIndex = webcam;
+            Main.imgPixel = pixel;
+            //Integer camIndex = Integer.parseInt();
+            //cameraIndex = ;
+            //System.out.println(obj.get("camera"));
+            // You can now work with the data from the config.yaml file as needed
+            // For example, you can access specific properties:
+            // String someProperty = ((Map<String, String>) data).get("someProperty");
+
+            // Close the input stream when you're done
+            input.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
+<<<<<<< HEAD
         cameraList = new CameraList();
         cameraList.showDisplay();
 
 //        showDisplay = new ShowDisplay();
 //        showDisplay.showDisplay();
+=======
+//        cameraList = new CameraList();
+//        cameraList.showDisplay();
+        ColorProperties colorProperties = new ColorProperties();
+        colorProperties.readColor();
+        showDisplay = new ShowDisplay();
+        showDisplay.showDisplay();
+>>>>>>> 51053095ef0305f2d7346eb4d30591fe375a39c3
 
 //        VideoCapture videoCapture = new VideoCapture(0); // Use 0 for the default camera, or change it to the appropriate camera index
 //        if (!videoCapture.isOpened()) {
