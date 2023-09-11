@@ -326,7 +326,7 @@ public class ShowDisplay extends JFrame {
         // Apply the mask to the original frame
         //frame.setTo(mask);
 //        frame.setTo(new Scalar(0, 5, 255), mask1).setTo(new Scalar(255, 5, 0), mask2);
-//#        frame.setTo(new Scalar(0, 5, 255), mask1); // Highlight detected green regions in the frame (green color)
+//        frame.setTo(new Scalar(0, 5, 255), mask1); // Highlight detected green regions in the frame (green color)
 //        frame.setTo(new Scalar(255, 5, 0), mask2); // Highlight detected green regions in the frame (green color)
     }
     private static BufferedImage matToBufferedImage(Mat mat) {
