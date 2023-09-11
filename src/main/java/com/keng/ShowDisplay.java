@@ -61,9 +61,10 @@ public class ShowDisplay extends JFrame {
         jLabal_MousePoint.setBackground(Color.black);
         jLabal_ColorSelect.setBackground(Color.black);
 
-        addListerner();
+
         Main.showDisplay.setVisible(true);
         toCameraDisplay();
+        addListerner();
     }
     private void toCameraDisplay(){
         hsvColorDetect[0]=255;

@@ -47,6 +47,7 @@ public class CameraList extends JFrame {
 //                }
                 Main.cameraList.setVisible(false);
                 Main.showDisplay = new ShowDisplay();
+                Main.showDisplay.setVisible(true);
                 Main.showDisplay.showDisplay();
             }
         });

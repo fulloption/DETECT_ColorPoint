@@ -31,12 +31,11 @@ public class Main {
         System.load(path+"/opencv_videoio_ffmpeg480_64.dll");
 
 
-//        cameraList = new CameraList();
-//        cameraList.showDisplay();
+        cameraList = new CameraList();
+        cameraList.showDisplay();
 
-
-        showDisplay = new ShowDisplay();
-        showDisplay.showDisplay();
+//        showDisplay = new ShowDisplay();
+//        showDisplay.showDisplay();
 
 //        VideoCapture videoCapture = new VideoCapture(0); // Use 0 for the default camera, or change it to the appropriate camera index
 //        if (!videoCapture.isOpened()) {
