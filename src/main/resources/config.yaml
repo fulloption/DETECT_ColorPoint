@@ -1,2 +1,4 @@
 camera: 0
 pixel: 20
+opencv_java: opencv_java480.dll
+opencv_video: opencv_videoio_ffmpeg480_64.dll

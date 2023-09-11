@@ -43,8 +43,6 @@ public class Main {
         String configFile = "/config.yaml";
         URL location = Main.class.getProtectionDomain().getCodeSource().getLocation();
         path = (location.getPath().substring(0,location.getPath().lastIndexOf("/")));
-        System.load(path+"/opencv_java480.dll");
-        System.load(path+"/opencv_videoio_ffmpeg480_64.dll");
         try {
             // Open an input stream to read the YAML file
             InputStream input = new FileInputStream(path+configFile);
@@ -57,6 +55,11 @@ public class Main {
             Map<String, Object> data = yaml.load(input);
             int webcam = (int) data.get("camera");
             int pixel = (int) data.get("pixel");
+            String opencv_java = (String) data.get("opencv_java");
+            String opencv_video = (String) data.get("opencv_video");
+
+            System.load(path+"/"+opencv_java);
+            System.load(path+"/"+opencv_video);
             Main.cameraIndex = webcam;
             Main.imgPixel = pixel;
             //Integer camIndex = Integer.parseInt();

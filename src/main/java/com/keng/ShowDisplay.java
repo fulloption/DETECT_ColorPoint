@@ -2,16 +2,20 @@ package com.keng;
 import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
+import org.opencv.imgproc.Moments;
 import org.opencv.videoio.VideoCapture;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.Point;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class ShowDisplay extends JFrame {
@@ -269,9 +273,11 @@ public class ShowDisplay extends JFrame {
 //        hsvColor[0] = 107;
 //        hsvColor[1] = 136;
 //        hsvColor[2] = 255;
-        int radius = 3;
-        Scalar red = new Scalar(0, 0, 255); // BGR color (red)
-        Imgproc.circle(frame, new org.opencv.core.Point(ChkXpoint, ChkYpoint), radius, red, 1); // -1 means filled circle
+
+//        int radius = 3;
+//        Scalar red = new Scalar(0, 0, 255); // BGR color (red)
+//        Imgproc.circle(frame, new org.opencv.core.Point(ChkXpoint, ChkYpoint), radius, red, 1); // -1 means filled circle
+
         // Define the color range you want to detect (example: green)
         // rgb(37, 150, 190)
 //        Scalar lowerBound = new Scalar(50, 50, 0); // Lower bound for green in HSV
@@ -288,14 +294,83 @@ public class ShowDisplay extends JFrame {
         Mat mask2 = new Mat();
         Core.inRange(hsvImage, lowerColor1, upperColor1, mask1);
         Core.inRange(hsvImage, lowerColor2, upperColor2, mask2);
-        int count = Core.countNonZero(mask1);
+        int count1 = Core.countNonZero(mask1);
         int count2 = Core.countNonZero(mask2);
         int chk2Value = 0;
 
 
+        // Find contours in the mask
+        List<MatOfPoint> contours = new ArrayList<>();
+        Imgproc.findContours(mask1, contours, new Mat(), Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
 
+        List<Point> centroids = new ArrayList<>();
 
-        if(count > Main.imgPixel){//change to detect
+        // Calculate centroids and filter based on size
+        for (MatOfPoint contour : contours) {
+            Moments moments = Imgproc.moments(contour);
+            double area = Imgproc.contourArea(contour);
+
+            // Filter small regions if needed (adjust the threshold as necessary)
+            if (area > 100) {
+                double centerX = moments.get_m10() / moments.get_m00();
+                double centerY = moments.get_m01() / moments.get_m00();
+                centroids.add(new Point((int)centerX, (int)centerY));
+                System.out.println(centerX+"-"+centerY);
+            }
+        }
+
+        // Find pairs of centroids that are approximately 20 pixels apart
+        double targetDistance = 20.0;
+        for (int i = 0; i < centroids.size(); i++) {
+            Point point1 = centroids.get(i);
+            for (int j = i + 1; j < centroids.size(); j++) {
+                Point point2 = centroids.get(j);
+                double distance = Math.sqrt(Math.pow(point2.x - point1.x, 2) + Math.pow(point2.y - point1.y, 2));
+                if (Math.abs(distance - targetDistance) < 1.0) {
+                    System.out.println("Pair found at (" + point1.x + ", " + point1.y + ") and (" + point2.x + ", " + point2.y + ")");
+                }
+            }
+        }
+
+        //---------------------OK สำหรับการ วาดวงกลมกึ่งกลางสีที่พบ
+        if(count1 > 100) {
+            // สร้าง Mat สำหรับเก็บค่า x และ y ของ pixel ที่ตรงกลาง
+            MatOfPoint centers = new MatOfPoint();
+            // ค้นหาตำแหน่ง pixel ที่ตรงกลางใน mask
+            Core.findNonZero(mask1, centers);
+            // หาค่า x และ y ของ pixel ที่ตรงกลาง
+            double centerX = 0;
+            double centerY = 0;
+            if (!centers.empty()) {
+                Moments moments = Imgproc.moments(centers);
+                centerX = moments.get_m10() / moments.get_m00();
+                centerY = moments.get_m01() / moments.get_m00();
+            }
+            Scalar master1 = new Scalar(Integer.parseInt(Main.B_Setup1)
+                    , Integer.parseInt(Main.G_Setup1)
+                    , Integer.parseInt(Main.R_Setup1)); // BGR color (red)
+            Imgproc.circle(frame, new org.opencv.core.Point(centerX, centerY), 20, master1, 2); // -1 means filled circle
+        }
+        if(count2 > 100) {
+            // สร้าง Mat สำหรับเก็บค่า x และ y ของ pixel ที่ตรงกลาง
+            MatOfPoint centers = new MatOfPoint();
+            // ค้นหาตำแหน่ง pixel ที่ตรงกลางใน mask
+            Core.findNonZero(mask2, centers);
+            // หาค่า x และ y ของ pixel ที่ตรงกลาง
+            double centerX = 0;
+            double centerY = 0;
+            if (!centers.empty()) {
+                Moments moments = Imgproc.moments(centers);
+                centerX = moments.get_m10() / moments.get_m00();
+                centerY = moments.get_m01() / moments.get_m00();
+            }
+            Scalar master2 = new Scalar(Integer.parseInt(Main.B_Setup2)
+                    , Integer.parseInt(Main.G_Setup2)
+                    , Integer.parseInt(Main.R_Setup2)); // BGR color (red)
+            Imgproc.circle(frame, new org.opencv.core.Point(centerX, centerY), 20, master2, 2); // -1 means filled circle
+        }
+        //---------------------OK สำหรับการ วาดวงกลมกึ่งกลางสีที่พบ
+        if(count1 > Main.imgPixel){//change to detect
             Color color = new Color(Integer.parseInt( Main.R_Setup1)
                     , Integer.parseInt( Main.G_Setup1)
                     , Integer.parseInt( Main.B_Setup1));// R G B
@@ -322,6 +397,8 @@ public class ShowDisplay extends JFrame {
             jLabelStatus.setText("NG");
             jLabelStatus.setBackground(Color.RED);
         }
+
+
         //System.out.println(count+" - "+count2);
         // Apply the mask to the original frame
         //frame.setTo(mask);
