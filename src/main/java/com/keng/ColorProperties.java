@@ -11,7 +11,6 @@ public class ColorProperties {
     String R_Setup1 = "0";
     String G_Setup1 = "0";
     String B_Setup1 = "0";
-
     String R_Setup2 = "0";
     String G_Setup2 = "0";
     String B_Setup2 = "0";

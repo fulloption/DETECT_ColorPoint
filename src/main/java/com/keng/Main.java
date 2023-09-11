@@ -43,8 +43,8 @@ public class Main {
         String configFile = "/config.yaml";
         URL location = Main.class.getProtectionDomain().getCodeSource().getLocation();
         path = (location.getPath().substring(0,location.getPath().lastIndexOf("/")));
-        System.load(path+"/opencv_java452.dll");
-        System.load(path+"/opencv_videoio_ffmpeg452_64.dll");
+        System.load(path+"/opencv_java480.dll");
+        System.load(path+"/opencv_videoio_ffmpeg480_64.dll");
         try {
             // Open an input stream to read the YAML file
             InputStream input = new FileInputStream(path+configFile);
@@ -73,20 +73,16 @@ public class Main {
         }
 
 
-<<<<<<< HEAD
-        cameraList = new CameraList();
-        cameraList.showDisplay();
-
+//        cameraList = new CameraList();
+//        cameraList.showDisplay();
 //        showDisplay = new ShowDisplay();
 //        showDisplay.showDisplay();
-=======
 //        cameraList = new CameraList();
 //        cameraList.showDisplay();
         ColorProperties colorProperties = new ColorProperties();
         colorProperties.readColor();
         showDisplay = new ShowDisplay();
         showDisplay.showDisplay();
->>>>>>> 51053095ef0305f2d7346eb4d30591fe375a39c3
 
 //        VideoCapture videoCapture = new VideoCapture(0); // Use 0 for the default camera, or change it to the appropriate camera index
 //        if (!videoCapture.isOpened()) {

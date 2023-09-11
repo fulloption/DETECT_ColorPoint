@@ -3,7 +3,6 @@ import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.videoio.VideoCapture;
-import org.opencv.utils.Converters;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -13,9 +12,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 
 public class ShowDisplay extends JFrame {
@@ -64,18 +60,13 @@ public class ShowDisplay extends JFrame {
         setLocationRelativeTo(null);
         setContentPane(panel1);
 
-<<<<<<< HEAD
-
         Main.showDisplay.setVisible(true);
-        toCameraDisplay();
-        addListerner();
-=======
+        //toCameraDisplay();
         initSwing();
         addListerner();
         Main.showDisplay.setVisible(true);
         toCameraDisplay();
         //
->>>>>>> 51053095ef0305f2d7346eb4d30591fe375a39c3
     }
     private void toCameraDisplay(){
         hsvColorDetect[0]=255;
@@ -104,18 +95,18 @@ public class ShowDisplay extends JFrame {
 
     }
     private void initSwing(){
-        File file  = new File(path+ "/eac.jpg") ;
-        ImageIcon eac = new ImageIcon(file.getPath());
-        JlabelLogo2.setIcon(resizeIcon(eac,200,100));
-        file  = new File(path+ "/yokohama.jpg") ;
-        ImageIcon yoko = new ImageIcon(file.getPath());
+//        File file  = new File(path+ "/eac.jpg") ;
+//        ImageIcon eac = new ImageIcon(file.getPath());
+//        JlabelLogo2.setIcon(resizeIcon(eac,200,100));
+//        file  = new File(path+ "/yokohama.jpg") ;
+//        ImageIcon yoko = new ImageIcon(file.getPath());
 
         //jLabelShow01.setText("");
 //        jLabelSetup.setPreferredSize(new Dimension(jLabelResult.getPreferredSize().width, 50)); // Set the height to 50 pixels
 //        jLabelResult.setPreferredSize(new Dimension(jLabelResult.getPreferredSize().width, 50)); // Set the height to 50 pixels
         jLabelLogo1.setText("");
         JlabelLogo2.setText("");
-        jLabelLogo1.setIcon(resizeIcon(yoko,200,100));
+//        jLabelLogo1.setIcon(resizeIcon(yoko,200,100));
         jLabelDisplay.setIcon(resizeIcon(iconImageNotFound,800,600));
         jLabelDisplay.setOpaque(true);
         jLabal_MousePoint.setOpaque(true);
@@ -230,7 +221,7 @@ public class ShowDisplay extends JFrame {
         return new ImageIcon(resizedImage);
     }
 
-    private void detectColor(Mat frame) {
+    private void detectColor2(Mat frame) {
         Mat hsvImage = new Mat();
         Imgproc.cvtColor(frame, hsvImage, Imgproc.COLOR_BGR2HSV);
 
@@ -257,7 +248,7 @@ public class ShowDisplay extends JFrame {
         int numberOfColorPoints = (circles.cols() == 0) ? 0 : circles.cols();
         System.out.println("Number of color points with a radius of 10 pixels: " + numberOfColorPoints);
     }
-    private void detectColor2(Mat frame) {
+    private void detectColor(Mat frame) {
         Mat hsvImage = new Mat();
         Imgproc.cvtColor(frame, hsvImage, Imgproc.COLOR_BGR2HSV);
         if(ChkXpoint != xPoint
@@ -335,7 +326,7 @@ public class ShowDisplay extends JFrame {
         // Apply the mask to the original frame
         //frame.setTo(mask);
 //        frame.setTo(new Scalar(0, 5, 255), mask1).setTo(new Scalar(255, 5, 0), mask2);
-//        frame.setTo(new Scalar(0, 5, 255), mask1); // Highlight detected green regions in the frame (green color)
+//#        frame.setTo(new Scalar(0, 5, 255), mask1); // Highlight detected green regions in the frame (green color)
 //        frame.setTo(new Scalar(255, 5, 0), mask2); // Highlight detected green regions in the frame (green color)
     }
     private static BufferedImage matToBufferedImage(Mat mat) {
